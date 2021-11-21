@@ -18,7 +18,7 @@
 <?php include "moduls/mod_reg.php" ?>
 <?php include "moduls/mod_log.php" ?>
 <?php include "moduls/nav_menu.php" ?>
-
+<?php ?>
 <div class="container-fluid background">
 	<div class="row justify-content-center">
 		<div class="col-12 content pt-5">
