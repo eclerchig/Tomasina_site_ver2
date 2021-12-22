@@ -24,8 +24,8 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 	<div class="row justify-content-center">	
 		<div class=" col-1">	</div>
 		<div class="row col-10">
-		<div class="col-4">
-		<div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-lg-4 offset-lg-0 offset-2 col-8">
+		<div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
   					<div class="row nav-left-row">	
@@ -49,7 +49,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 		</div>
 		<div class="col-12"></div>
 		</div>	
-		<div class="col-md-7 offset-md-1 col-12 content mb-5">
+		<div class="col-lg-7 col-12 offset-0 offset-lg-1 prof-content mb-5">
 			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   				<ol class="breadcrumb">
     				<li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof">Личный кабинет админа</a></li>
@@ -93,7 +93,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
               </tbody>
             </table>
           <?php }?>
-          	<h2>Подтвердить передачу котика</h2>
+          	<h2 class="mt-4">Подтвердить передачу котика</h2>
           	<?php 
           		$rows = mysqli_query($connect, "SELECT * FROM `transmission` WHERE `accepted` = '1' AND `success` = '0' ORDER BY `ID`");
           		$count = mysqli_num_rows($rows);
@@ -132,7 +132,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
               </tbody>
             </table>
           <?php }?>
-			<h2>Успешные передачи котиков</h2>
+			<h2 class="mt-4">Успешные передачи котиков</h2>
 			<?php 
           		$rows = mysqli_query($connect, "SELECT * FROM `transmission` WHERE `accepted` = '1' AND `success` = '1' ORDER BY `date`");
           		$count = mysqli_num_rows($rows);
@@ -165,7 +165,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
                    		$ID_worker = $row['ID_worker'];
                    		$worker = mysqli_fetch_assoc(mysqli_query($connect, "SELECT * FROM `workers` WHERE `ID` = '$ID_worker'"));
                    	?>
-                  <td><?php echo $row['date'] ?></td>
+                  <td style="text-align: center;"><?php echo $row['date'] ?></td>
                   <td><?php echo $user['surname'].' '.$user['name'].' '.$user['fathername']?></td>
                   <td><a href="/tomasina/pages/aboutCat?id=<?php echo $ID_cat?>"><?php echo $cat['Кличка']?></a></td>
                   <td><?php echo $worker['ФИО']?></td>   
@@ -176,47 +176,59 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
             </table>
           <?php }?>
 
-      <h2>Отчёты</h2>
+      <h2 class="mt-4">Отчёты</h2>
 
-      <h4 class="mt-4">Отчёт о переданных кошках за определенный период</h4>
+      <h4 class="mt-2">Отчёт о переданных кошках за определенный период (краткий)</h4>
       <form action="/tomasina/pages/prof/report" method="POST">
-        <h5>Период</h5>
+        <p class="mt-3" style="margin-bottom: 0rem; line-height: 0.8rem;">Период</p>
         <div class="row g-3">
-          <div class="col">
-            c   <input type="date" class="form-control" name="datebefore" required>
+          <div class="col-5">
+            c   <input type="date" class="form-control" name="date1" required>
           </div>
-          <div class="col">
-            по  <input type="date" class="form-control" name="dateafter" required>
+          <div class="offset-1 col-5">
+            по  <input type="date" class="form-control" name="date2" required>
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-4"></div>
-          <div class="col-4">
+          <div class="col-3"></div>
+          <div class="col-6">
           <button type="submit" name="do_report1" class="btn btn-primary" style="width: 100%">Сформировать отчёт</button>
           </div>
-          <div class="col-4"></div>
+          <div class="col-3"></div>
         </div>
       </form>
 
-      <h4 class="mt-4">Отчёт о переданных кошках за определенный период</h4>
+      <h4 class="mt-4">Отчёт о переданных кошках за определенный период (подробный)</h4>
       <form action="/tomasina/pages/prof/report" method="POST">
-        <h5>Период</h5>
+        <p class="mt-3" style="margin-bottom: 0rem; line-height: 0.8rem;">Период</p>
         <div class="row g-3">
-          <div class="col">
-            c   <input type="date" class="form-control" id="date" name="datebefore" placeholder="" required>
+          <div class="col-5">
+            c   <input type="date" class="form-control" id="date" name="date1" placeholder="" required>
           </div>
-          <div class="col">
-            по  <input type="date" class="form-control" id="date" name="dateafter" placeholder="" required>
+          <div class="offset-1 col-5">
+            по  <input type="date" class="form-control" id="date" name="date2" placeholder="" required>
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-4"></div>
-          <div class="col-4">
+          <div class="col-3"></div>
+          <div class="col-6">
           <button type="submit" name="do_report2" class="btn btn-primary" style="width: 100%">Сформировать отчёт</button>
           </div>
-          <div class="col-4"></div>
+          <div class="col-3"></div>
         </div>
       </form>
+
+      <h4 class="mt-4">Отчёт о посещаемости страниц</h4>
+      <form action="/tomasina/pages/prof/report" method="POST">
+        <div class="row mt-3">
+          <div class="col-3"></div>
+          <div class="col-6">
+          <button type="submit" name="do_report3" class="btn btn-primary" style="width: 100%">Сформировать отчёт</button>
+          </div>
+          <div class="col-3"></div>
+        </div>
+      </form>
+
 		</div>
 		</div>
 	    <div class="col-1">	</div>

@@ -14,9 +14,8 @@ $id = $_SESSION['id'];
     $ID_user = $_GET["id"];
     $query = "SELECT * FROM `users` WHERE `ID` = $ID_user";
     $row = mysqli_fetch_assoc(mysqli_query($connect, $query));
-  }
-
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST["do_rate"]))
+  }  
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' AND (isset($_POST["do_rate"]) || isset($_POST["do_delete"])))
   {
     if (empty($_POST['mode']))
     {
@@ -41,6 +40,15 @@ $id = $_SESSION['id'];
     else
     {
       $transmission = $_POST['id_trans'];
+      echo $transmission;
+      if (isset($_POST["do_delete"]))
+      {
+         $query = "DELETE FROM `transmission` WHERE `transmission`.`ID` = '$transmission'";
+         echo $query;
+         mysqli_query($connect, $query);
+      }
+      else
+      {
       $ID_worker = $_POST['ID_worker'];
       $query = "UPDATE `transmission` SET `success` = '1', `ID_worker` = '$ID_worker' WHERE `transmission`.`ID` = '$transmission'";
       mysqli_query($connect, $query);
@@ -48,6 +56,7 @@ $id = $_SESSION['id'];
       $ID_cat = $trans['ID_cat'];
       $query = "UPDATE `cats` SET `Взят` = '1' WHERE `ID` = '$ID_cat'";
       mysqli_query($connect, $query);
+      }
       $url = '/tomasina/pages/prof';
     }
      header('Location: '.$url);
@@ -74,7 +83,7 @@ $id = $_SESSION['id'];
 		
 		<div class="row col-10">
 		<div class="col-4">
-		<div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
             <div class="row nav-left-row">  
@@ -98,50 +107,58 @@ $id = $_SESSION['id'];
 		</div>
 		<div class="col-12">	</div>
 		</div>	
-		<div class="col-7 offset-1 content pt-3 mb-5">
+		<div class="col-7 offset-1 prof-content pt-3 mb-5">
 			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   				<ol class="breadcrumb">
     				<li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof">Личный кабинет</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Редактирование данных</li>
   				</ol>
 			</nav>
-			<h3>Информация и пользователе</h3><h3><?php echo ($row['surname'] ." ".$row['name']." ". $row['fathername'])?></h3>
-          <form method="POST" class="needs-validation" novalidate>
-              <div class="mb-3 mt-4">
+          <h3>Информация о пользователе</h3><h3><?php echo ($row['surname'] ." ".$row['name']." ". $row['fathername'])?></h3>
+          <form method="POST" class="needs-validation mt-3" novalidate>
+            <H5>ЛИЧНЫЕ ДАННЫЕ</H5>
+            <div class="row">
+              <div class="col-5 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Фамилия</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['surname']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
+              <div class="col-5 offset-1 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Имя</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['name']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
+              <div class="col-5 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Отчество</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['fathername']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Пол</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['sex']?>" aria-label="readonly input example" readonly>
-              </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Возраст</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['age']?>" aria-label="readonly input example" readonly>
-              </div>
+            </div>
+            <div class="row">
+                <div class="mb-4 col-2">
+                    <label for="exampleFormControlInput1" class="form-label">Пол</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['sex']?>" aria-label="readonly input example" readonly>
+                </div>
+                <div class="mb-4 offset-2 col-3">
+                    <label for="exampleFormControlInput1" class="form-label">Возраст</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['age']?>" aria-label="readonly input example" readonly>
+                </div>
+            </div>
+            <h5>ПРОЧАЯ ИНФОРМАЦИЯ</h5>
               <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Место работы</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['work']?>" aria-label="readonly input example" readonly>
               </div>
               <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Номер телефона</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['num_telephone']?>" aria-label="readonly input example" readonly>
-              </div>
-              <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Адрес проживания</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['address']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Электронная почта</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['email']?>" aria-label="readonly input example" readonly>
+              <div class="row">
+                <div class="mb-3 col-5">
+                    <label for="exampleFormControlInput1" class="form-label">Номер телефона</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['num_telephone']?>" aria-label="readonly input example" readonly>
+                </div>
+                <div class="mb-3 col-5 offset-1">
+                    <label for="exampleFormControlInput1" class="form-label">Электронная почта</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['email']?>" aria-label="readonly input example" readonly>
+                </div>
               </div>
           </form>
           <?php 
@@ -158,30 +175,31 @@ $id = $_SESSION['id'];
             $id_int = $row['ID'];
           }
           ?> 
-          <form method="POST">
-          <div class="row g-3">
-              <div class="col-sm">
-                <label class="col-sm-2 col-form-label">Оценка дома</label>
-                <input type="text" class="form-control" name="home" required>
+          <form method="POST" class="needs-validation" novalidate>
+          <div class="row">
+              <div class="col-sm-3">
+                <label class="col-sm-5 col-form-label">Оценка дома</label>
+                <input type="number" class="form-control" name="home" min="1" max="10" required pattern="[0-9]{1,2}">
+                <div class="invalid-feedback">
+                  Введите число от 1 до 10!
+                </div>
               </div>
-              <div class="col-sm">
+              <div class="col-sm-5 offset-1">
                 <label class="col-sm-2 col-form-label">Оценка траснпортировки</label>
-                <input type="text" class="form-control" name="trans" required>
+                <input type="number" class="form-control" name="trans" min="1" max="10" required pattern="[0-9]{1,2}">
+                <div class="invalid-feedback">
+                  Введите число от 1 до 10!
+                </div>
               </div>
-              <div class="col-sm">
-              </div>
-          </div>
-          <div class="row g-3">
-              <div class="col-sm">
+              <div class="col-sm-5">
                 <label class="col-sm col-form-label">Оценка питания</label>
-                <input type="text" class="form-control" name="food" required>
-              </div>
-              <div class="col-sm">
-              </div>
-              <div class="col-sm">
+                <input type="number" class="form-control" name="food" min="1" max="10" required pattern="[0-9]{1,2}">
+                <div class="invalid-feedback">
+                  Введите число от 1 до 10!
+                </div>
               </div>
           </div>
-          <div class="row g-3">
+          <div class="row g-3 mt-3">
           <div class="col-sm">
               </div>
           <div class="col-sm">
@@ -205,10 +223,10 @@ $id = $_SESSION['id'];
             $id_trans = $row['ID'];
           }
           ?>
-          <form method="POST">
+          <form method="POST" class="needs-validation" novalidate style="margin-bottom: 0px">
           <label for="inputState" class="form-label">Работник</label>
             <select name="ID_worker" id="inputState" class="form-select" required>
-              <option selected disabled>Выберите...</option>
+              <option selected disabled value="">Выберите...</option>
               <?php
               $query = "SELECT * FROM `workers`";
               $workers = mysqli_query($connect,$query);
@@ -221,16 +239,21 @@ $id = $_SESSION['id'];
               }
               ?>
             </select>
-          <div class="row g-3">
-          <div class="col-sm">
-              </div>
-          <div class="col-sm">
+          <div class="row">
+          <div class="col-6 offset-3">
             <input name="id_trans" value="<?php echo $id_trans ?>" type="hidden">  
             <input name="mode" value="1" type="hidden">
             <button type="submit" name="do_rate" class="btn btn-info mt-3" style="width: 100%">Подтвердить</button>
           </div>
-          <div class="col-sm"></div>
-          </form> 
+          </div>
+          </form>
+          <div class="col-6 offset-3">
+          <form method="POST">
+            <input name="id_trans" value="<?php echo $id_trans ?>" type="hidden">  
+            <input name="mode" value="1" type="hidden">
+            <button type="submit" name="do_delete" class="btn btn-info mt-3" style="width: 100%">Отменить передачу</button>
+          </form>
+          </div> 
           <?php
           }
           ?>
@@ -244,5 +267,23 @@ $id = $_SESSION['id'];
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 	<script src="../../jquery-3.6.0.min.js"></script>
 	<script src="../../jq.js"></script>
+  <script>
+
+var forms = document.querySelectorAll('.needs-validation');
+Array.prototype.slice.call(forms).forEach (function (f) {
+f.addEventListener("submit",function(event)
+  {
+    if (!f.checkValidity()) 
+    {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    f.classList.add("was-validated");
+
+  }, false)
+});
+
+</script>
 </body>
 </html>

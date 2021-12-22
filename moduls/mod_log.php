@@ -24,18 +24,14 @@
         $_SESSION['auth'] = true;
         $_SESSION['id'] = $user['ID'];
         $_SESSION['status'] = $user['status'];
-        echo $_SESSION['auth'];
       } 
       else 
       {
-        echo 'неподходящий пароль';
       }
     }
     else
     {
-      echo 'нет логина';
     }
-  $connect->close();
 }
 ?>
 
@@ -47,7 +43,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="needs-validation" novalidate method="POST">
+        <form method="POST"  id="auth" class="needs-validation" novalidate>
   			<div class="mb-3">
     			<label for="exampleInputEmail1" class="form-label">Электронная почта</label>
     			<input type="email" name="login" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
@@ -56,14 +52,12 @@
     			<label for="exampleInputPassword1" class="form-label">Пароль</label>
     			<input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
   			</div>
-  			<!-- <div class="mb-3 form-check">
-    			<input type="checkbox" class="form-check-input" id="exampleCheck1">
-    			<label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
-  			</div> -->
   			<label for=""><a href="" data-bs-toggle="modal" data-bs-target="#form_reg" data-bs-dismiss="modal">Еще не зарегистрировались?</a></label>
-  			<div class="mt-3 form-check">
-  				<button type="submit" name="do_log" class="btn btn-primary" style="">Войти</button>
-  			</div>
+        <div class="row">
+  			 <div class="mt-3 form-check" style="text-align: center; padding-left: 0px">
+  				  <input type="submit" name="do_log" class="btn btn-primary" style="" value="Войти">
+  			 </div>
+        </div>
 		</form>
       </div>
     </div>
@@ -84,4 +78,5 @@ f.addEventListener("submit",function(event)
 
   }, false)
 });
+
 </script>

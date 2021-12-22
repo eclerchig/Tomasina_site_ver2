@@ -15,7 +15,7 @@ $id = $_SESSION['id'];
     $query = "SELECT * FROM `users` WHERE `ID` = $ID_user";
     $row = mysqli_fetch_assoc(mysqli_query($connect, $query)); //данные о пользователе
 
-    $query = "SELECT * FROM `interviews` WHERE `ID_user`= $ID_user AND `datetime` BETWEEN CAST(SUBDATE(NOW(), INTERVAL 4 MONTH) AS DATE) AND CAST(NOW() AS DATE) ORDER BY `datetime`;"; //свежие собеседования от пользователя
+    $query = "SELECT * FROM `interviews` WHERE `ID_user`= $ID_user AND `datetime` BETWEEN CAST(SUBDATE(NOW(), INTERVAL 4 MONTH) AS DATE) AND CAST(NOW() AS DATE) AND `accepted` = 1 ORDER BY `datetime`;"; //свежие собеседования от пользователя
     $rows = mysqli_query($connect, $query);
     $count = mysqli_num_rows($rows);
 
@@ -116,7 +116,7 @@ $id = $_SESSION['id'];
 		
 		<div class="row col-10">
 		<div class="col-4">
-		<div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
             <div class="row nav-left-row">  
@@ -140,7 +140,7 @@ $id = $_SESSION['id'];
 		</div>
 		<div class="col-12">	</div>
 		</div>	
-		<div class="col-7 offset-1 content pt-3 mb-5">
+		<div class="col-7 offset-1 prof-content pt-3 mb-5">
 			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   				<ol class="breadcrumb">
     				<li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof">Личный кабинет</a></li>
@@ -148,42 +148,50 @@ $id = $_SESSION['id'];
   				</ol>
 			</nav>
 			<h3>Информация о пользователе</h3><h3><?php echo ($row['surname'] ." ".$row['name']." ". $row['fathername'])?></h3>
-          <form method="POST" class="needs-validation" novalidate>
-              <div class="mb-3 mt-4">
+          <form method="POST" class="needs-validation mt-3" novalidate>
+            <H5>ЛИЧНЫЕ ДАННЫЕ</H5>
+            <div class="row">
+              <div class="col-5 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Фамилия</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['surname']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
+              <div class="col-5 offset-1 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Имя</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['name']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
+              <div class="col-5 mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Отчество</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['fathername']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Пол</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['sex']?>" aria-label="readonly input example" readonly>
-              </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Возраст</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['age']?>" aria-label="readonly input example" readonly>
-              </div>
+            </div>
+            <div class="row">
+                <div class="mb-4 col-2">
+                    <label for="exampleFormControlInput1" class="form-label">Пол</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['sex']?>" aria-label="readonly input example" readonly>
+                </div>
+                <div class="mb-4 offset-2 col-3">
+                    <label for="exampleFormControlInput1" class="form-label">Возраст</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['age']?>" aria-label="readonly input example" readonly>
+                </div>
+            </div>
+            <h5>ПРОЧАЯ ИНФОРМАЦИЯ</h5>
               <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Место работы</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['work']?>" aria-label="readonly input example" readonly>
               </div>
               <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Номер телефона</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['num_telephone']?>" aria-label="readonly input example" readonly>
-              </div>
-              <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Адрес проживания</label>
                   <input class="form-control" type="text" placeholder="<?php echo $row['address']?>" aria-label="readonly input example" readonly>
               </div>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Электронная почта</label>
-                  <input class="form-control" type="text" placeholder="<?php echo $row['email']?>" aria-label="readonly input example" readonly>
+              <div class="row">
+                <div class="mb-3 col-5">
+                    <label for="exampleFormControlInput1" class="form-label">Номер телефона</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['num_telephone']?>" aria-label="readonly input example" readonly>
+                </div>
+                <div class="mb-3 col-5 offset-1">
+                    <label for="exampleFormControlInput1" class="form-label">Электронная почта</label>
+                    <input class="form-control" type="text" placeholder="<?php echo $row['email']?>" aria-label="readonly input example" readonly>
+                </div>
               </div>
           </form>
           <h3>Результат последнего собеседования</h3>
@@ -191,7 +199,7 @@ $id = $_SESSION['id'];
           if ($count < 1)
           {
               ?>
-              <label style="color: red">Нет актуальных собеседований</label>
+              <label style="color: red">Нет актуальных пройденных собеседований</label>
               <div class="row justify-content-center mt-4">
                       <?php
                       if (empty($mode)) {

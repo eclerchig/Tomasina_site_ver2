@@ -4,12 +4,14 @@ function genCatCard($data){
 	$id = $data['ID'];
 	$name = $data['Кличка'];
 	$path = $data['ПутьДоКартинки'];
-	$example = "<div class=\"col\"><div class=\"p-3 border bg-light card\"><img src=\"/tomasina/pic/cats/$path\" class=\"card-img-top\" height=\"300px\" alt=\"...\"><div class=\"card-body text-center\"><a class=\"btn btn-info btn-lg\" href=\"/tomasina/pages/aboutCat?id=$id\">$name</a></div></div></div>";
-	echo $example;
+	$example = "<li><a href=\"/tomasina/pages/aboutCat?id=$id\"><img src=\"/tomasina/pic/cats/$path\"><div style=\"height: 50px!important\"> ♡ ".mb_strtoupper($name)." ♡ </div></a></li>;";
+	// $example = "<div class=\"col\"><div class=\"p-3 border bg-light card card-catalog\"><img src=\"/tomasina/pic/cats/$path\" class=\"card-img-top\" height=\"300px\" alt=\"...\"><div class=\"card-body text-center\"><a class=\"btn btn-info btn-lg\" href=\"/tomasina/pages/aboutCat?id=$id\">$name</a></div></div></div>";
+	echo $example; 
 }
 require_once "./includes/bd.php";
 $sql = "SELECT * FROM `cats` WHERE `Взят` = 0";
-if((isset($_GET['sex']) && $_GET['sex'] != "") || isset($_GET['cheeped']) || isset($_GET['steril']) || isset($_GET['vacian'])){
+if((isset($_GET['sex']) && $_GET['sex'] != "") || isset($_GET['cheeped']) || isset($_GET['steril']) || isset($_GET['vacian']) || (isset($_GET['breed'])&& ($_GET['breed'] != "no")) || (isset($_GET['color'])&& ($_GET['color'] != "no")))
+{
 	$sql = $sql . " and ";
 }
 if(isset($_GET['sex']) && $_GET['sex'] != ""){
@@ -32,7 +34,20 @@ if(isset($_GET['steril'])){
 }
 if(isset($_GET['vacian'])){
 	$sql = $sql . " `Вакцинация` = 1 ";
+	if(isset($_GET['breed']) && ($_GET['breed'] != "no")){
+		$sql = $sql . " and ";
+	}
 }
+if(isset($_GET['breed']) && ($_GET['breed'] != "no")){
+	$sql = $sql . " `IDПорода` =".$_GET['breed'];
+	if(isset($_GET['color']) && ($_GET['color'] != "no")){
+		$sql = $sql . " and ";
+	}
+}
+if(isset($_GET['color']) && ($_GET['color'] != "no")){
+	$sql = $sql . " `IDОкрас` =".$_GET['color'];
+}
+
 mysqli_set_charset($connect, "utf8mb4");
 $select = mysqli_query($connect, $sql);
 ?>
@@ -53,7 +68,7 @@ $select = mysqli_query($connect, $sql);
 
 <div class="container-fluid background pt-5">
 	<div class="row justify-content-center">	
-		<div class="col-11 content pt-5 mb-5">
+		<div class="col-11 prof-content pt-5 mb-5">
 		<div class="row justify-content-center">
 		<div class="col-3">
 		<h3>Фильтры</h3>
@@ -83,7 +98,49 @@ $select = mysqli_query($connect, $sql);
 				  }
 				  ?>>
   				<label class="form-check-label" for="flexRadioDefault2">Не важно</label >
-			</div> 
+			</div>
+			<label for="exampleDataList" class="form-label mt-2">Порода</label>
+			<select name="breed" class="form-select" required>
+              <option 
+              <?php if (isset($_GET['breed'])&&($_GET['breed'] == "")||(!isset($_GET['breed']))) echo " selected " ?>
+               value="no">Выберите</option>
+              <?php 
+              $breeds = mysqli_query($connect, "SELECT * FROM breeds");
+              for($i = 0; $i < mysqli_num_rows($breeds); $i++)
+              {
+                $breed = mysqli_fetch_assoc($breeds);
+                if (isset ($_GET['breed'])&&($_GET['breed'] == $breed['ID']))
+                {
+                	echo "<option selected value=".$breed['ID'].">".$breed['Name']."</option>";
+            	}
+            	else
+            	{
+            		echo "<option value=".$breed['ID'].">".$breed['Name']."</option>";
+            	}
+              }; 
+              ?>
+            </select>
+			<label for="exampleDataList" class="form-label mt-2">Окрас</label> 
+				<select name="color" class="form-select" required>
+	              <option 
+	              <?php if (isset ($_GET['color'])&&($_GET['color'] == "")||(!isset($_GET['color']))) echo " selected " ?>
+	               value="no">Выберите</option>
+	              <?php 
+	              $colors = mysqli_query($connect, "SELECT * FROM coatcolor");
+	              for($i = 0; $i < mysqli_num_rows($colors); $i++)
+	              {
+	                $color = mysqli_fetch_assoc($colors);
+	                if (isset ($_GET['color'])&&($_GET['color'] == $color['ID']))
+                	{
+                		echo "<option selected value=".$color['ID'].">".$color['Name']."</option>";
+            		}
+            		else
+            		{
+            			echo "<option value=".$color['ID'].">".$color['Name']."</option>";
+            		}
+	              }; 
+	              ?>
+	            </select>
 			<label for="exampleDataList" class="form-label mt-2">Особенности</label>
 			<div class="form-check pt-2 point-filter no_pad">
 				<div class="form-check">
@@ -118,11 +175,12 @@ $select = mysqli_query($connect, $sql);
           	</div>
 		</form>
 		</div>
-		<div class="col-9">
-			<h1>КОТЫ И КОШКИ</h1>
-			<div class="container overflow-hidden mt-5">
-  				<div class="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
-					  <?php
+		<div class="col-9" style="padding-left: 20px">
+			<h1 style="padding-left: 6%">КОТЫ И КОШКИ</h1>
+			<div class="container overflow-hidden mt-4">
+				<div class="col" id="wrap">
+		        <ul id="gallery">
+		        	<?php
 					  if(mysqli_num_rows($select) < 1){
 						  echo "<p><h2>Извините, таких котиков нет!</h2></p>";
 					  }
@@ -131,7 +189,9 @@ $select = mysqli_query($connect, $sql);
 						genCatCard($res);
 					  } 
 					  ?>
-  				</div>
+		        </ul>
+  				<!-- <div class="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
+  				</div> -->
 			</div>
 		</div>
 		</div>

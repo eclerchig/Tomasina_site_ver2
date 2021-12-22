@@ -1,7 +1,7 @@
 <?php 
 include "includes/bd.php";
-echo $_SESSION['id'];
 $id = $_SESSION['id'];
+echo 'sdfdsdfsd';
 $query = "SELECT * FROM users WHERE ID='$id'";
 $user = mysqli_fetch_array(mysqli_query($connect, $query));
 ?>
@@ -14,6 +14,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<title>Главная страница "Томасина"</title>
 	<link rel="stylesheet" href="../style.css">
+	<script src="jquery-3.6.0.min.js"></script>
 </head>
 <body>
 	
@@ -46,7 +47,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
   				<li class="nav-item">
   					<div class="row nav-left-row">	
   						<div class="col-lg-2 col-12"><p id="center-i"><img src="/tomasina/pic/cat.png" alt="" class="item-m"></div>
-  						<div class="col-lg-10 col-12"><a class="nav-link" href="/tomasina/pages/prof/cats">Приобрести котика</a></div>
+  						<div class="col-lg-10 col-12"><a class="nav-link" href="/tomasina/pages/prof/cats">Приобрести котикаa</a></div>
   					</div>
   				</li>
 			</ul>
@@ -110,7 +111,6 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 
 <?php include "moduls/footer.php" ?>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-	<script src="jquery-3.6.0.min.js"></script>
 	<script src="jq.js"></script>
 </body>
 </html>

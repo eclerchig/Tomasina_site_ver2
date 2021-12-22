@@ -5,17 +5,20 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 //echo "путь: $uri";
 $segments = explode('/', trim($uri, '/'));
 
+
 $method = $_SERVER['REQUEST_METHOD'];
+
+if (!empty($segments[1]) and $segments[1] == 'carouselengine')
+{
+	$file = '/tomasina/moduls/carouselengine/' . $segments[2];
+	require $file;
+}
 
 if (!empty($segments[1])) 
 {
 	if (!empty($segments[2]))
 	{
-		if ($segments[2] == 'cats')
-		{
-			$file = 'pages/cats.php';
-		}
-		elseif ($segments[2]== 'prof') {
+		if ($segments[2]== 'prof') {
 			
 			if (!empty($_SESSION['auth']) and $_SESSION['status'] == '1')
 			{

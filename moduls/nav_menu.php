@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   		<div class="container">
     		<a class="navbar-brand" href="#">
@@ -60,7 +59,7 @@
       </div>
       <div class="col-4">
         <button  id="do_cat">
-        <a href="#">ПРИЮТИТЬ КОШКУ</a>
+        <a href="/tomasina/pages/cats/cats">ПРИЮТИТЬ КОШКУ</a>
       </button>
         </div>
       <div class="col-4"></div>

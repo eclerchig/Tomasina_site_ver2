@@ -25,7 +25,11 @@ $id = $_SESSION['id'];
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<title>Главная страница "Томасина"</title>
+
 	<link rel="stylesheet" href="../../style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  <script src="jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -35,10 +39,10 @@ $id = $_SESSION['id'];
 
 <div class="container-fluid background pt-5">
 	<div class="row justify-content-center">	
-		<div class="col-lg-1 col-0"> </div> 
-    <div class="row col-lg-10 col-12">
-    <div class="col-md-4 col-12">
-    <div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-1"> </div> 
+    <div class="row col-10">
+    <div class="col-lg-4 offset-lg-0 offset-2 col-8">
+    <div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
   					<div class="row nav-left-row">	
@@ -62,7 +66,7 @@ $id = $_SESSION['id'];
 		</div>
 		<div class="col-12">	</div>
 		</div>	
-		<div class="col-md-7 offset-md-1 col-12 content mb-5">
+		<div class="col-lg-7 col-12 offset-0 offset-lg-1  prof-content mb-5">
 			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   				<ol class="breadcrumb">
     				<li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof">Личный кабинет</a></li>
@@ -80,6 +84,9 @@ $id = $_SESSION['id'];
           }
           else
           {?>
+            <div class="alert alert-primary" role="alert">
+              Собеседования сохраняют свою актуальность в течение 4 месяцев!
+            </div>
             <table class="table mt-4 table-success table-hover table_int">
             <thead>
               <tr align="center">
@@ -114,21 +121,42 @@ $id = $_SESSION['id'];
             <?php
               }
       ?>
-      <div class="row justify-content-center">
-        <div class="col-2"> </div>
-          <div class="col- mb-5">     
-            <button type="button" class="btn btn-info col-12 mt-3" data-bs-toggle="modal" data-bs-target="#order_interview">Записаться на собеседование</button>
-          </div>
-        <div class="col-2"> </div>
-      </div>
-      <h4 >Ближайшее собеседование</h4>
+      <h4 >Ближайшее назначенное собеседование</h4>
       <?php 
-          $rows = mysqli_query($connect, "SELECT * FROM `interviews` WHERE `ID_user` = '$id' AND `accepted` = '1';");
+          $rows = mysqli_query($connect, "SELECT t.ID, t.ID_user, t.datetime from `interviews` t INNER JOIN (SELECT ID, ID_user, max(`datetime`) AS MaxDate FROM `interviews` GROUP BY ID_user ) tm on t.ID_user = tm.ID_user AND t.datetime = tm.MaxDate WHERE t.ID_user = 48 AND t.result = 0;");
           $count = mysqli_num_rows($rows);
           if  ($count < 1)
           {
             ?>
-            <label>Вы не назначали собеседований в ближайшее время</label>
+            <label>Вы не назначали собеседований в последнее время.</label>
+          <?php
+          }
+          else
+          {?>
+          <label>
+            Последнее назначенное собеседование: 
+            <?php    
+            $row = mysqli_fetch_assoc($rows); 
+            $time = $row['datetime'];
+            echo $time 
+          ?>              
+          </label>
+        <?php  } ?>
+        <h4 class="mt-2">Последнее актуальное собеседование</h4>
+        <?php 
+          $rows = mysqli_query($connect, "SELECT * FROM `interviews` WHERE `ID_user`= $id AND `datetime` BETWEEN CAST(SUBDATE(NOW(), INTERVAL 4 MONTH) AS DATE) AND CAST(NOW() AS DATE) AND `accepted` = 1 AND `result` >= 7 ORDER BY `datetime`;");
+          $count = mysqli_num_rows($rows);
+          if  ($count < 1)
+          {
+            ?>
+            <label>Пройденных актуальных собеседований нет, для получения кошки запишитесь на новое.</label>
+            <div class="row mt-2 justify-content-center">
+              <div class="col-3"></div>
+                <div class="col-6 mb-4" style="text-align: center;">     
+                  <button type="button" class="btn btn-info col-12 mt-3" data-bs-toggle="modal" data-bs-target="#order_interview">Записаться на собеседование</button>
+                </div>
+              <div class="col-3"></div>
+            </div>
           <?php
           }
           else
@@ -139,9 +167,15 @@ $id = $_SESSION['id'];
             $row = mysqli_fetch_assoc($rows); 
             $time = $row['datetime'];
             echo $time 
-          ?>              
+          ?> 
+          Полученный итоговый балл:
+          <?php    
+            $res = $row['result'];
+            echo $res 
+          ?>
           </label>
-        <?php  } ?>
+
+        <?php } ?>
 		</div>
 </div>
 <div class="col-1"> </div>
@@ -162,9 +196,7 @@ $id = $_SESSION['id'];
 </div>
 
 <?php include "moduls/footer.php" ?>
-
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-	<script src="jquery-3.6.0.min.js"></script>
-	<script src="jq.js"></script>
+<script src="../../jquery-3.6.0.min.js"></script>
+<script src="../../jq.js"></script>
 </body>
 </html>

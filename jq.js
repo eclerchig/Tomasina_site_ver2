@@ -1,7 +1,7 @@
  $(window).on('load',function() {});
 reposition();
 var navH_now = $("#cats").css("height");
- //alert ('тык высота = '+ navH_now);
+ // alert ('тык высота = '+ navH_now);
   $("#info_banner").css({
          "height" : navH_now
      });

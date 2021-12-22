@@ -34,10 +34,10 @@ $id = $_SESSION['id'];
 
 <div class="container-fluid background pt-5">
 	<div class="row justify-content-center">	
-		<div class="col-lg-1 col-0"> </div> 
-    <div class="row col-lg-10 col-12">
-    <div class="col-md-4 col-12">
-    <div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-1"> </div> 
+    <div class="row col-10">
+    <div class="col-lg-4 offset-lg-0 offset-2 col-8">
+    <div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
             <div class="row nav-left-row">  
@@ -61,7 +61,7 @@ $id = $_SESSION['id'];
 		</div>
 		<div class="col-12">	</div>
 		</div>	
-		<div class="col-md-7 offset-md-1 col-12 content mb-5">
+		<div class="col-lg-7 col-12 offset-0 offset-lg-1 prof-content mb-5">
       <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof">Личный кабинет админа</a></li>
@@ -103,7 +103,7 @@ $id = $_SESSION['id'];
           <?php }?>
           <h2 class="mt-3">Необходимо проставить результаты</h2>
           <?php 
-          $rows = mysqli_query($connect, "SELECT * FROM `interviews` WHERE `accepted` = '1' AND `result` IS NULL ORDER BY `datetime`");
+          $rows = mysqli_query($connect, "SELECT * FROM `interviews` WHERE `accepted` = '1' AND `result` = 0 ORDER BY `datetime`");
           $count = mysqli_num_rows($rows);
           if  ($count < 1)
           {
@@ -113,7 +113,7 @@ $id = $_SESSION['id'];
           }
           else
           {?>
-            <table class="table table-success table-hover mt-5 interviews">
+            <table class="table table-success table-hover mt-3 interviews">
               <thead>
                 <tr class="t_title">
                   <th scope="col">Пользователь</th>
@@ -142,9 +142,8 @@ $id = $_SESSION['id'];
 <div class="col-1"> </div>
 
 <?php include "moduls/footer.php" ?>
-
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-	<script src="/tomasina/jquery-3.6.0.min.js"></script>
+	<script src="../../jquery-3.6.0.min.js"></script>
   <script>
     $('a.info_user').click(function() {
       var i = $(this).attr('id');
@@ -158,6 +157,7 @@ $id = $_SESSION['id'];
       });
     });
 </script> 
-<script src="/tomasina/jq.js"></script>
+
+<script src="../../jq.js"></script>
 </body>
 </html>

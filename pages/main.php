@@ -1,6 +1,5 @@
 <?php 
  include "./includes/bd.php";
-
 ?>
 
 <!DOCTYPE html>
@@ -11,14 +10,13 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<title>Главная страница "Томасина"</title>
 	<link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  
 </head>
 <body>
 
 <?php include "moduls/mod_reg.php" ?>
 <?php include "moduls/mod_log.php" ?>
 <?php include "moduls/nav_menu.php" ?>
-<?php ?>
 <div class="container-fluid background">
 	<div class="row justify-content-center">
 		<div class="col-12 content pt-5">

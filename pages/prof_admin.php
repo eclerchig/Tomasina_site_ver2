@@ -27,7 +27,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 		
 		<div class="row col-10">
 		<div class="col-4">
-		<div class="col-12 content py-5 mb-5" id="col-left">
+		<div class="col-12 prof-content py-5 mb-5" id="col-left">
 			<ul class="nav flex-column nav-left">
   				<li class="nav-item">
   					<div class="row nav-left-row">	
@@ -45,7 +45,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 		</div>
 		<div class="col-12"></div>
 		</div>	
-		<div class="col-7 offset-1 content pt-3 mb-5">
+		<div class="col-7 offset-1 prof-content pt-3 mb-5">
 			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   				<ol class="breadcrumb">
     				<li class="breadcrumb-item" aria-current="page"><a href="/tomasina/pages/prof/edit">Личный кабинет</a></li>
@@ -102,7 +102,7 @@ $user = mysqli_fetch_array(mysqli_query($connect, $query));
 
 <?php include "moduls/footer.php" ?>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-	<script src="jquery-3.6.0.min.js"></script>
-	<script src="jq.js"></script>
+	<script src="../../jquery-3.6.0.min.js"></script>
+	<script src="../../jq.js"></script>
 </body>
 </html>
